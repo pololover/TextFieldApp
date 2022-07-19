@@ -19,6 +19,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        textField.resignFirstResponder()
+    }
+    
     func setup() {
         view.backgroundColor = UIColor.gray
         textField.keyboardType = .emailAddress
@@ -26,6 +30,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         textField.placeholder = "이메일 입력"
         textField.clearButtonMode = .always
         textField.returnKeyType = .next
+        
+        textField.becomeFirstResponder()
     }
     
     // 텍스트 입력을 시작할때 (시작할지 말지)
@@ -45,11 +51,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     // 한글자씩 입력받을 때 실행하는 함수 (입력받을지 말지)
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        print(string)
-        if string == "a" {
+       
+        if Int(string) != nil {
             return false
-        }else {
-            return true
+        } else {
+            guard let text = textField.text else{ return false}
+            let newCount = text.count + string.count - range.length
+            return newCount <= 10
         }
     }
     
@@ -69,6 +77,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         print(#function)
     }
     @IBAction func doneButtonTapped(_ sender: UIButton) {
+        textField.resignFirstResponder()
     }
     
 }
